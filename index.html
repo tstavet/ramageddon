@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The RAMageddon Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BRAND TOKENS — swap these later. Everything derives from here.
+   ============================================================ */
+:root{
+  --bg:#F4F6F8;          /* page background            */
+  --card:#FFFFFF;        /* card surface               */
+  --ink:#14161A;         /* primary text               */
+  --muted:#6B7280;       /* secondary text             */
+  --faint:#9AA3AF;       /* captions / ghost bar       */
+  --line:#E4E7EC;        /* hairlines / grid           */
+  --screen:#0D1014;      /* dark instrument panel       */
+  --screen-2:#15191F;    /* panel inner                */
+  --screen-grid:rgba(255,255,255,.05);
+  --rise:#FF4326;        /* the "increase" accent (hot) */
+  --rise-2:#FF8A3D;      /* gradient partner            */
+  --hold:#3B82F6;        /* "holding / flat" accent     */
+
+  --maxw:1080px;
+  --r:14px;              /* card radius */
+  --ease:cubic-bezier(.22,.61,.36,1);
+
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--font-body);line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+/* ---------- masthead ---------- */
+header{padding:64px 0 28px}
+.eyebrow{
+  font-family:var(--font-mono);font-size:12px;font-weight:600;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--rise);
+  display:flex;align-items:center;gap:12px;
+}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--rise)}
+h1{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(30px,5.2vw,54px);line-height:1.04;
+  letter-spacing:-.02em;margin:18px 0 0;max-width:18ch;
+}
+.dek{margin:16px 0 0;font-size:clamp(15px,2vw,18px);color:var(--muted);max-width:54ch}
+
+/* ---------- hero instrument ---------- */
+.panel{
+  background:radial-gradient(120% 140% at 80% -10%,var(--screen-2),var(--screen));
+  border-radius:20px;margin-top:34px;padding:28px 28px 18px;
+  color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 24px 60px -28px rgba(13,16,20,.55);
+}
+.readout{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 26px;margin-bottom:6px}
+.readout .big{
+  font-family:var(--font-mono);font-weight:700;font-size:clamp(40px,8vw,68px);
+  line-height:.9;letter-spacing:-.02em;
+}
+.readout .meta{display:flex;flex-direction:column;gap:6px;padding-bottom:8px}
+.delta{
+  font-family:var(--font-mono);font-weight:700;font-size:18px;
+  color:var(--rise-2);display:inline-flex;align-items:center;gap:7px;width:max-content;
+}
+.delta::before{content:"▲";font-size:12px}
+.readout .lab{
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:rgba(255,255,255,.5);
+}
+
+.chartbox{position:relative;margin-top:6px}
+svg.line{display:block;width:100%;height:auto;overflow:visible;touch-action:none}
+.gridline{stroke:var(--screen-grid);stroke-width:1}
+.axis-lab{font-family:var(--font-mono);font-size:14.5px;fill:rgba(255,255,255,.42)}
+.area{opacity:.0}
+.stroke{fill:none;stroke:url(#riseGrad);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.dot{fill:var(--rise-2);stroke:var(--screen);stroke-width:3}
+.dot-ring{fill:none;stroke:var(--rise-2);stroke-width:1.5;opacity:.45}
+.cross{stroke:rgba(255,255,255,.35);stroke-width:1;stroke-dasharray:3 4;opacity:0;transition:opacity .12s}
+.hit{fill:transparent}
+
+.tip{
+  position:absolute;top:0;left:0;pointer-events:none;opacity:0;
+  transform:translate(-50%,-118%);transition:opacity .12s;
+  background:#fff;color:var(--ink);border-radius:9px;padding:9px 11px;
+  box-shadow:0 12px 30px -10px rgba(0,0,0,.4);white-space:nowrap;z-index:5;
+}
+.tip .t-m{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+.tip .t-v{font-family:var(--font-mono);font-weight:700;font-size:18px;margin-top:1px}
+.tip .t-n{font-size:11px;color:var(--muted);margin-top:3px;max-width:200px;white-space:normal}
+.tip .t-src{display:inline-block;margin-top:5px;font-family:var(--font-mono);font-size:9.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--rise)}
+
+.caption{
+  font-family:var(--font-mono);font-size:11.5px;color:rgba(255,255,255,.4);
+  margin:14px 2px 2px;line-height:1.55;
+}
+
+/* ---------- products ---------- */
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  margin:64px 0 22px;flex-wrap:wrap}
+.section-head h2{
+  font-family:var(--font-display);font-weight:600;font-size:clamp(22px,3.4vw,32px);
+  letter-spacing:-.015em;margin:0;
+}
+.section-head .hint{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:16px}
+.swatch{display:inline-flex;align-items:center;gap:7px}
+.swatch i{width:11px;height:11px;border-radius:2px;display:inline-block}
+.swatch .s-last{border:1.5px solid var(--faint);background:transparent}
+.swatch .s-now{background:var(--rise)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:16px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 18px 16px;display:flex;flex-direction:column;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .2s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -22px rgba(20,22,26,.4);border-color:#d6dae1}
+.card .cat{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--faint)}
+.card .name{font-family:var(--font-display);font-weight:600;font-size:16px;
+  margin:4px 0 0;letter-spacing:-.01em;line-height:1.18;min-height:2.3em}
+
+.bars{display:flex;align-items:flex-end;gap:18px;height:128px;margin:14px 0 6px;padding-top:6px}
+.bcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bval{font-family:var(--font-mono);font-size:12px;font-weight:600;margin-bottom:6px;color:var(--ink);
+  opacity:0;transition:opacity .5s .35s}
+.bcol.last .bval{color:var(--faint)}
+.bar{width:100%;max-width:54px;border-radius:5px 5px 0 0;height:0;
+  transition:height .9s var(--ease)}
+.bar.last{border:1.5px solid var(--faint);background:repeating-linear-gradient(
+  -45deg,rgba(154,163,175,.10),rgba(154,163,175,.10) 5px,transparent 5px,transparent 10px)}
+.bar.now{background:linear-gradient(180deg,var(--rise-2),var(--rise))}
+.btag{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--faint);margin-top:7px}
+
+.delta-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.delta-big{font-family:var(--font-mono);font-weight:700;font-size:22px;letter-spacing:-.01em}
+.delta-big.up{color:var(--rise)} .delta-big.flat{color:var(--hold)} .delta-big.na{color:var(--faint)}
+.status{font-family:var(--font-mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;padding:4px 8px;border-radius:20px}
+.status.up{color:var(--rise);background:rgba(255,67,38,.09)}
+.status.flat{color:var(--hold);background:rgba(59,130,246,.1)}
+.status.na{color:var(--faint);background:rgba(154,163,175,.13)}
+.src{font-family:var(--font-mono);font-size:10px;color:var(--faint);margin-top:10px;line-height:1.5}
+
+/* delayed card variant */
+.card.delayed .bars{align-items:center;justify-content:center}
+.ghostbox{width:100%;height:84px;border:1.5px dashed var(--line);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- footer ---------- */
+footer{margin:54px 0 80px;padding-top:22px;border-top:1px solid var(--line)}
+footer p{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);line-height:1.7;margin:0;max-width:80ch}
+footer b{color:var(--ink);font-weight:600}
+
+:focus-visible{outline:2.5px solid var(--rise);outline-offset:3px;border-radius:4px}
+
+@media (max-width:560px){
+  header{padding:44px 0 20px}
+  .panel{padding:22px 18px 14px;border-radius:16px}
+  .bars{height:108px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  .bval{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">The RAMageddon Index</div>
+    <h1>The price of memory is setting the price of everything you buy.</h1>
+    <p class="dek">AI's appetite for memory chips is the fastest electronics price shock on record — and it's only starting to reach the shelf. Here's the leading indicator, then the wave.</p>
+  </header>
+
+  <!-- ===================== HERO INSTRUMENT ===================== -->
+  <section class="panel" aria-label="RAM price tracker">
+    <div class="readout">
+      <div class="big" id="bigPrice">$375</div>
+      <div class="meta">
+        <span class="delta" id="bigDelta">+275% year over year</span>
+        <span class="lab">Cheapest 32GB DDR5 kit · US retail</span>
+      </div>
+    </div>
+
+    <div class="chartbox" id="chartbox">
+      <svg class="line" id="lineChart" viewBox="0 0 1000 440" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line chart of RAM price climbing from about $95 to $375 between August 2025 and June 2026"></svg>
+      <div class="tip" id="tip">
+        <div class="t-m" id="tipM"></div>
+        <div class="t-v" id="tipV"></div>
+        <div class="t-n" id="tipN"></div>
+        <span class="t-src" id="tipSrc"></span>
+      </div>
+    </div>
+
+    <p class="caption" id="heroCaption"></p>
+  </section>
+
+  <!-- ===================== PRODUCTS ===================== -->
+  <div class="section-head">
+    <h2>What it means for your electronics</h2>
+    <div class="hint">
+      <span class="swatch"><i class="s-last"></i> Last year</span>
+      <span class="swatch"><i class="s-now"></i> Now</span>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <p id="footnote"></p>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA — single source of truth. Update these every issue.
+   Each point carries provenance so the page stays auditable.
+   ============================================================ */
+
+// Hero: cheapest 32GB DDR5 kit, US retail (USD).
+// `sourced:true` = a hard, citable anchor. Others interpolated from reported trend.
+const RAM_SERIES = [
+  { label:"Aug ’25", value:95,  note:"Pre-surge baseline" },
+  { label:"Sep ’25", value:100, note:"Held ~$80–120 through 2024–25" },
+  { label:"Oct ’25", value:135, note:"Climb begins as AI demand reallocates fabs" },
+  { label:"Nov ’25", value:215 },
+  { label:"Dec ’25", value:300 },
+  { label:"Jan ’26", value:364, note:"32GB DDR5-6000 kit, up ~250% from baseline", sourced:true, src:"Tom’s Hardware / PC Gamer" },
+  { label:"Feb ’26", value:358 },
+  { label:"Mar ’26", value:345, note:"Google TurboQuant briefly softens spot prices" },
+  { label:"Apr ’26", value:360 },
+  { label:"May ’26", value:370 },
+  { label:"Jun ’26", value:375, note:"Cheapest 32GB DDR5 kit hit $374.97 (Jun 3)", sourced:true, src:"Tom’s Hardware" },
+];
+
+const HERO = {
+  baselineForDelta: 100,                       // ~1yr ago, drives the +YoY% readout
+  caption:"Cheapest available 32GB DDR5 kit, US retail. Jan & Jun ’26 are sourced anchors (Tom’s Hardware); intervening months interpolated from the reported trend. Hover any point for detail."
+};
+
+// Products: last-year vs now. status: "rising" | "flat" | "delayed"
+const PRODUCTS = [
+  { name:"32GB DDR5 RAM kit", cat:"Components", last:100, now:375, status:"rising", src:"Tom’s Hardware — sourced" },
+  { name:"32GB DDR4 RAM kit", cat:"Components", last:75,  now:165, status:"rising", src:"Tom’s Hardware — sourced" },
+  { name:"1TB NVMe SSD",      cat:"Storage",    last:60,  now:110, status:"rising", src:"NAND surge — representative" },
+  { name:"Typical Windows laptop", cat:"Laptops", last:1000, now:1170, status:"rising", src:"Lenovo/Dell/HP/Acer/ASUS ’26 guidance — representative config" },
+  { name:"Samsung Galaxy S26", cat:"Phones",   last:799, now:839, status:"rising", src:"Launch pricing — sourced" },
+  { name:"iPhone (base)",     cat:"Phones",     last:799, now:799, status:"flat",  src:"Apple holding — DRAM contracts expire Jan — sourced" },
+  { name:"Steam Machine",     cat:"Consoles",   last:null,now:null,status:"delayed",src:"Launch delayed by memory costs — sourced" },
+];
+
+const FOOTNOTE = "<b>Methodology.</b> Component prices reflect cheapest US retail kits (Tom’s Hardware daily trackers). Finished-goods figures use manufacturer launch pricing where available; entries marked “representative” reflect publicly stated OEM guidance applied to a typical configuration, pending exact SKU confirmation. Last updated Jun 2026.";
+
+/* ============================================================
+   RENDER — you shouldn't need to touch anything below.
+   ============================================================ */
+const $=(s,el=document)=>el.querySelector(s);
+const NS="http://www.w3.org/2000/svg";
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const money=n=>"$"+Math.round(n).toLocaleString("en-US");
+const mk=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+/* ---------- hero line chart ---------- */
+const VB={w:1000,h:440}, PAD={l:78,r:34,t:34,b:52};
+const PLOT={x:PAD.l,y:PAD.t,w:VB.w-PAD.l-PAD.r,h:VB.h-PAD.t-PAD.b};
+const vals=RAM_SERIES.map(d=>d.value);
+const yMax=Math.ceil(Math.max(...vals)*1.12/50)*50, yMin=0;
+const X=i=>PLOT.x+(RAM_SERIES.length<2?0:i/(RAM_SERIES.length-1)*PLOT.w);
+const Y=v=>PLOT.y+PLOT.h-((v-yMin)/(yMax-yMin))*PLOT.h;
+
+(function buildChart(){
+  const svg=$("#lineChart");
+  // defs
+  const defs=mk("defs");
+  const lg=mk("linearGradient",{id:"riseGrad",x1:"0",y1:"0",x2:"1",y2:"0"});
+  lg.append(mk("stop",{offset:"0",  "stop-color":"#FF8A3D"}));
+  lg.append(mk("stop",{offset:"1",  "stop-color":"#FF4326"}));
+  const ag=mk("linearGradient",{id:"areaGrad",x1:"0",y1:"0",x2:"0",y2:"1"});
+  ag.append(mk("stop",{offset:"0","stop-color":"#FF4326","stop-opacity":".34"}));
+  ag.append(mk("stop",{offset:"1","stop-color":"#FF4326","stop-opacity":"0"}));
+  defs.append(lg,ag); svg.append(defs);
+
+  // y gridlines + labels
+  const ticks=4;
+  for(let i=0;i<=ticks;i++){
+    const v=yMin+(yMax-yMin)*i/ticks, y=Y(v);
+    svg.append(mk("line",{class:"gridline",x1:PLOT.x,y1:y,x2:PLOT.x+PLOT.w,y2:y}));
+    const lab=mk("text",{class:"axis-lab",x:PLOT.x-14,y:y+4,"text-anchor":"end"});
+    lab.textContent=money(v); svg.append(lab);
+  }
+  // x labels — thin to every other (+ always last) so they stay legible when scaled down
+  const lastIdx=RAM_SERIES.length-1;
+  RAM_SERIES.forEach((d,i)=>{
+    if(i%2!==0 && i!==lastIdx) return;
+    const t=mk("text",{class:"axis-lab",x:X(i),y:VB.h-20,"text-anchor":"middle"});
+    t.textContent=d.label; svg.append(t);
+  });
+
+  // area + line paths
+  const linePts=RAM_SERIES.map((d,i)=>`${X(i)},${Y(d.value)}`);
+  const areaD=`M${X(0)},${Y(yMin)} L`+linePts.join(" L")+` L${X(RAM_SERIES.length-1)},${Y(yMin)} Z`;
+  const area=mk("path",{class:"area",d:areaD,fill:"url(#areaGrad)"}); svg.append(area);
+  const line=mk("path",{class:"stroke",d:"M"+linePts.join(" L")}); svg.append(line);
+
+  // sourced anchor dots
+  RAM_SERIES.forEach((d,i)=>{ if(d.sourced){
+    svg.append(mk("circle",{class:"dot-ring",cx:X(i),cy:Y(d.value),r:9}));
+    svg.append(mk("circle",{class:"dot",cx:X(i),cy:Y(d.value),r:4.5}));
+  }});
+
+  // crosshair + interaction
+  const cross=mk("line",{class:"cross",x1:0,y1:PLOT.y,x2:0,y2:PLOT.y+PLOT.h});
+  const hov=mk("circle",{class:"dot",cx:0,cy:0,r:5,opacity:0});
+  svg.append(cross,hov);
+  const hit=mk("rect",{class:"hit",x:PLOT.x,y:PLOT.y,width:PLOT.w,height:PLOT.h});
+  svg.append(hit);
+
+  const box=$("#chartbox"), tip=$("#tip");
+  function move(e){
+    const r=svg.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width*VB.w;
+    let i=Math.round((px-PLOT.x)/PLOT.w*(RAM_SERIES.length-1));
+    i=Math.max(0,Math.min(RAM_SERIES.length-1,i));
+    const d=RAM_SERIES[i], cx=X(i), cy=Y(d.value);
+    cross.setAttribute("x1",cx); cross.setAttribute("x2",cx); cross.style.opacity=1;
+    hov.setAttribute("cx",cx); hov.setAttribute("cy",cy); hov.setAttribute("opacity",1);
+    // place tooltip (convert viewBox->screen within box)
+    const sx=cx/VB.w*r.width, sy=cy/VB.h*r.height;
+    tip.style.left=sx+"px"; tip.style.top=sy+"px"; tip.style.opacity=1;
+    $("#tipM").textContent=d.label;
+    $("#tipV").textContent=money(d.value);
+    $("#tipN").textContent=d.note||"";
+    $("#tipSrc").textContent=d.sourced?("◆ "+(d.src||"sourced")):"";
+  }
+  function leave(){cross.style.opacity=0;hov.setAttribute("opacity",0);tip.style.opacity=0;}
+  svg.addEventListener("pointermove",move);
+  svg.addEventListener("pointerleave",leave);
+
+  // draw-in animation
+  if(!reduce){
+    const len=line.getTotalLength();
+    line.style.strokeDasharray=len; line.style.strokeDashoffset=len;
+    line.getBoundingClientRect();
+    line.style.transition="stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1)";
+    line.style.strokeDashoffset=0;
+    area.style.transition="opacity .9s .7s"; requestAnimationFrame(()=>area.style.opacity=1);
+  } else { area.style.opacity=1; }
+})();
+
+/* ---------- hero readout count-up ---------- */
+(function readout(){
+  const now=RAM_SERIES[RAM_SERIES.length-1].value;
+  const pct=Math.round((now-HERO.baselineForDelta)/HERO.baselineForDelta*100);
+  $("#bigDelta").textContent=`+${pct}% year over year`;
+  $("#heroCaption").textContent=HERO.caption;
+  const el=$("#bigPrice");
+  if(reduce){el.textContent=money(now);return;}
+  let s=null;const dur=1100;
+  requestAnimationFrame(function step(t){
+    if(s===null)s=t;const k=Math.min(1,(t-s)/dur);
+    el.textContent=money(now*(1-Math.pow(1-k,3)));
+    if(k<1)requestAnimationFrame(step);else el.textContent=money(now);
+  });
+})();
+
+/* ---------- product cards ---------- */
+(function products(){
+  const grid=$("#grid");
+  PRODUCTS.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card"+(p.status==="delayed"?" delayed":"");
+    card.tabIndex=0;
+
+    let pct=0,cls="up",statusTxt="Rising";
+    if(p.status==="flat"){cls="flat";statusTxt="Holding";}
+    if(p.status==="delayed"){cls="na";statusTxt="Delayed";}
+    if(p.last&&p.now)pct=Math.round((p.now-p.last)/p.last*100);
+
+    let barsHTML;
+    if(p.status==="delayed"){
+      barsHTML=`<div class="bars"><div class="ghostbox">No price — pulled</div></div>`;
+    }else{
+      const nowH=100, lastH=Math.max(4,Math.round(p.last/p.now*100));
+      barsHTML=`<div class="bars">
+        <div class="bcol last"><span class="bval">${money(p.last)}</span>
+          <div class="bar last" data-h="${lastH}"></div><span class="btag">Last yr</span></div>
+        <div class="bcol now"><span class="bval">${money(p.now)}</span>
+          <div class="bar now" data-h="${nowH}"></div><span class="btag">Now</span></div>
+      </div>`;
+    }
+    const deltaTxt=p.status==="delayed"?"N/A":(p.status==="flat"?"+0%":`+${pct}%`);
+
+    card.innerHTML=`
+      <div class="cat">${p.cat}</div>
+      <div class="name">${p.name}</div>
+      ${barsHTML}
+      <div class="delta-row">
+        <span class="delta-big ${cls}">${deltaTxt}</span>
+        <span class="status ${cls}">${statusTxt}</span>
+      </div>
+      <div class="src">${p.src}</div>`;
+    grid.append(card);
+  });
+
+  // reveal + grow on scroll
+  const bars=()=>document.querySelectorAll(".bar");
+  if(reduce){bars().forEach(b=>{b.style.height=b.dataset.h+"%";});
+    document.querySelectorAll(".bval").forEach(v=>v.style.opacity=1);return;}
+  const io=new IntersectionObserver((ents)=>{
+    ents.forEach(e=>{
+      if(!e.isIntersecting)return;
+      e.target.querySelectorAll(".bar").forEach((b,i)=>{
+        setTimeout(()=>{b.style.height=b.dataset.h+"%";},i*90);
+      });
+      e.target.querySelectorAll(".bval").forEach(v=>v.style.opacity=1);
+      io.unobserve(e.target);
+    });
+  },{threshold:.35});
+  document.querySelectorAll(".card").forEach(c=>io.observe(c));
+})();
+
+$("#footnote").innerHTML=FOOTNOTE;
+</script>
+</body>
+</html>
