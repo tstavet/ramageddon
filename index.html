@@ -47,7 +47,7 @@ body{
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
 /* ---------- masthead ---------- */
-header{padding:64px 0 28px}
+header{padding:52px 0 20px}
 .eyebrow{
   font-family:var(--font-mono);font-size:12px;font-weight:600;
   letter-spacing:.28em;text-transform:uppercase;color:var(--rise);
@@ -56,21 +56,21 @@ header{padding:64px 0 28px}
 .eyebrow::before{content:"";width:26px;height:2px;background:var(--rise)}
 h1{
   font-family:var(--font-display);font-weight:600;
-  font-size:clamp(30px,5.2vw,54px);line-height:1.04;
-  letter-spacing:-.02em;margin:18px 0 0;max-width:20ch;
+  font-size:clamp(34px,5.8vw,62px);line-height:1.03;
+  letter-spacing:-.02em;margin:18px 0 0;max-width:24ch;
 }
-.dek{margin:16px 0 0;font-size:clamp(15px,2vw,18px);color:var(--muted);max-width:58ch}
+.dek{margin:18px 0 0;font-size:clamp(16px,2.1vw,19px);color:var(--muted);max-width:60ch}
 
 /* ---------- hero instrument ---------- */
 .panel{
   background:radial-gradient(120% 140% at 80% -10%,var(--screen-2),var(--screen));
-  border-radius:20px;margin-top:34px;padding:28px 28px 18px;
+  border-radius:20px;margin-top:24px;padding:22px 28px 12px;
   color:#fff;position:relative;overflow:hidden;
   box-shadow:0 24px 60px -28px rgba(13,16,20,.55);
 }
 .readout{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 26px;margin-bottom:6px}
 .readout .big{
-  font-family:var(--font-mono);font-weight:700;font-size:clamp(40px,8vw,68px);
+  font-family:var(--font-mono);font-weight:700;font-size:clamp(36px,6.5vw,58px);
   line-height:.9;letter-spacing:-.02em;
 }
 .readout .meta{display:flex;flex-direction:column;gap:6px;padding-bottom:8px}
@@ -206,8 +206,8 @@ footer b{color:var(--ink);font-weight:600}
 <div class="wrap">
   <header>
     <div class="eyebrow">The RAMageddon Index · July 2026</div>
-    <h1>Memory got expensive. Now every brand is deciding whether to make it your problem.</h1>
-    <p class="dek">AI's hunger for memory chips set off the fastest electronics cost shock on record. Here's the leading indicator — then how five brands are passing it on, hiding it, or eating it.</p>
+    <h1>Memory got expensive. Here's where it's showing up in the price of what you buy.</h1>
+    <p class="dek">AI's demand for memory chips set off the fastest electronics cost shock on record. Here's the leading indicator — then how prices have moved across five major brands, product by product.</p>
   </header>
 
   <!-- ===================== HERO INSTRUMENT ===================== -->
@@ -221,7 +221,7 @@ footer b{color:var(--ink);font-weight:600}
     </div>
 
     <div class="chartbox" id="chartbox">
-      <svg class="line" id="lineChart" viewBox="0 0 1000 440" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line chart of RAM price climbing from about $95 to $375 between August 2025 and June 2026"></svg>
+      <svg class="line" id="lineChart" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line chart of RAM price climbing from about $95 to $375 between August 2025 and June 2026"></svg>
       <div class="tip" id="tip">
         <div class="t-m" id="tipM"></div>
         <div class="t-v" id="tipV"></div>
@@ -235,8 +235,8 @@ footer b{color:var(--ink);font-weight:600}
 
   <!-- ===================== BRANDS ===================== -->
   <div class="section-head">
-    <h2>How five brands are handling the squeeze</h2>
-    <p>Same shock, five playbooks. Each chart compares a product's base price now against a year ago (or launch). The spread — who hikes openly, who hides it, who holds — is the story.</p>
+    <h2>Prices, brand by brand</h2>
+    <p>Each chart compares a product's current base price against its price a year ago (or at launch). Figures are sourced; where a maker named memory or storage costs, it's marked.</p>
   </div>
 
   <div class="legend" id="legend">
@@ -290,8 +290,8 @@ const HERO = {
    soon: optional announced upcoming price.  Update / append monthly. ---- */
 const BRANDS = [
   {
-    name:"Apple", strat:"Hiked — across the board", stratClass:"hiked",
-    blurb:"On June 25 Apple raised prices across nearly its entire Mac and iPad lineup in a single day, naming memory and storage costs outright. iPhone, Watch and AirPods were spared — a tell for which products carry the most memory.",
+    name:"Apple", strat:"Up across the lineup", stratClass:"hiked",
+    blurb:"On June 25, Apple raised prices across most of its Mac and iPad lineup, citing higher memory and storage costs. iPhone, Apple Watch and AirPods were unchanged.",
     src:"9to5Mac, Jun 25 2026; CNBC",
     products:[
       { name:"iPad 11″", cfg:"A16 · 128GB", last:349, now:449, mem:"cited", note:"Jun 25 hike +$100" },
@@ -301,60 +301,60 @@ const BRANDS = [
       { name:"MacBook Air 13″", cfg:"M5 · 16/512", last:999, now:1299, mem:"cited", note:"M4 launch $999 → +$100 Mar → +$200 Jun" },
       { name:"iMac 24″", cfg:"M4 · 16/256", last:1299, now:1499, mem:"cited" },
       { name:"MacBook Pro 14″", cfg:"M5 · 16/512", last:1699, now:1999, mem:"cited" },
-      { name:"iPhone 17", cfg:"256GB · control", last:799, now:799, mem:"held", note:"Left untouched — Apple's control" },
+      { name:"iPhone 17", cfg:"256GB", last:799, now:799, mem:"held", note:"Price unchanged" },
     ]
   },
   {
-    name:"Samsung", strat:"Hiking — while profiting", stratClass:"hiked",
-    blurb:"The irony of the surge: Samsung is the world's #1 memory maker. The same shortage that lifted its quarterly profit ~8× (≈$38B) is now raising the bill of materials on its own phones and tablets — and it's passing that on to you.",
+    name:"Samsung", strat:"Phones & tablets up", stratClass:"hiked",
+    blurb:"Samsung — one of the world's largest memory manufacturers — raised prices on its flagship phone and budget tablet this cycle, while foldables and wearables held. Press coverage links the phone increase to higher memory costs.",
     src:"Korea Times; TrendForce; samsung.com",
     products:[
-      { name:"Galaxy S26", cfg:"12/256", last:799.99, now:899.99, mem:"cited", note:"128GB tier dropped" },
+      { name:"Galaxy S26", cfg:"12/256", last:799.99, now:899.99, mem:"cited", note:"128GB tier discontinued; base now 256GB" },
       { name:"Galaxy Z Fold 7", cfg:"12/256", last:1999.99, now:1999.99, mem:"held", note:"Fold 8 (Jul 22) rumored hike" },
       { name:"Galaxy Z Flip 7", cfg:"12/256", last:1099.99, now:1099.99, mem:"held" },
       { name:"Galaxy Tab A11+", cfg:"8/256", last:219.99, now:249.99, mem:"ind", note:"RAM 2×, storage 4×", est:true },
       { name:"Galaxy Book6", cfg:"Ultra · 16/512", last:999.99, now:1049.99, mem:"ind" },
-      { name:"Galaxy Watch 8", cfg:"40mm", last:299.99, now:349.99, mem:"other", note:"Redesign, not memory" },
+      { name:"Galaxy Watch 8", cfg:"40mm", last:299.99, now:349.99, mem:"other", note:"New design" },
       { name:"Galaxy Buds 4", cfg:"ANC", last:179.99, now:179.99, mem:"held" },
     ]
   },
   {
-    name:"Microsoft", strat:"Hiked + de-spec’d", stratClass:"split",
-    blurb:"Two playbooks at once. Xbox takes open sticker hikes (with another round landing Aug 1). Surface keeps prices near flat but halves the RAM to 8GB — which quietly strips Copilot+ certification. Pay more, or pay the same for less.",
+    name:"Microsoft", strat:"Up; some lower-spec options", stratClass:"split",
+    blurb:"Xbox console prices rose, with a further increase scheduled for Aug 1. Microsoft also introduced lower-cost Surface models with 8GB of memory in place of 16GB, citing component costs; the 8GB models aren't Copilot+ certified.",
     src:"Xbox Wire, Jun 25 2026; Gematsu; XDA",
     products:[
       { name:"Xbox Series X", cfg:"1TB · disc", last:599.99, now:649.99, mem:"cited", soon:"→ $800 Aug 1" },
       { name:"Xbox Series S", cfg:"512GB", last:379.99, now:399.99, mem:"cited", soon:"→ $500 Aug 1" },
       { name:"Xbox X Digital", cfg:"1TB", last:549.99, now:599.99, mem:"cited", soon:"→ $750 Aug 1", est:true },
-      { name:"ROG Xbox Ally", cfg:"Z2A · 16/512", last:599.99, now:599.99, mem:"held", note:"ASUS-set; US base held" },
-      { name:"Surface Pro 12″", cfg:"now 8GB/256", last:799, now:849, mem:"cited", note:"Half the RAM — loses Copilot+" },
-      { name:"Surface Laptop 13″", cfg:"now 8GB/256", last:899, now:949, mem:"cited", note:"8GB de-spec" },
+      { name:"ROG Xbox Ally", cfg:"Z2A · 16/512", last:599.99, now:599.99, mem:"held", note:"ASUS-set price; US base unchanged" },
+      { name:"Surface Pro 12″", cfg:"now 8GB/256", last:799, now:849, mem:"cited", note:"8GB base (was 16GB); not Copilot+ certified" },
+      { name:"Surface Laptop 13″", cfg:"now 8GB/256", last:899, now:949, mem:"cited", note:"8GB base (was 16GB)" },
     ]
   },
   {
-    name:"Dell", strat:"Hiding it", stratClass:"despec",
-    blurb:"The hardest to spot. Advertised 'starting' prices hold via rotating promos while list prices and big-ticket desktops climb 25–50% — and the flagship gaming laptop gets pricier with half the SSD. Monitors, untouched by memory, are the giveaway control.",
+    name:"Dell", strat:"List up · street held", stratClass:"despec",
+    blurb:"Dell's advertised starting prices have largely held through promotions, while list prices and several desktop configurations rose 25–50% year over year. Monitors, which use little memory, were flat to lower.",
     src:"dell.com (Jun 26 2026); Gartner; launch coverage",
     products:[
       { name:"Dell Tower", cfg:"Ultra5 · 16/1TB", last:599, now:919.99, mem:"cited", note:"vs Inspiron 3030 ’25 — cross-model", est:true },
       { name:"Dell 27 AIO", cfg:"Core5 · 16/512", last:749.99, now:949.99, mem:"cited", est:true },
-      { name:"Alienware 16", cfg:"16GB · RTX4050", last:1149, now:1649.99, mem:"cited", note:"SSD CUT 1TB → 512GB" },
+      { name:"Alienware 16", cfg:"16GB · RTX4050", last:1149, now:1649.99, mem:"cited", note:"Base SSD 512GB (was 1TB)" },
       { name:"Dell 15 (list)", cfg:"Core3 · 8/512", last:649, now:799.99, mem:"ind", note:"List price; street still ~$450", est:true },
-      { name:"Dell XPS 14", cfg:"Ultra5 · 16/512", last:1499, now:1350, mem:"ind", note:"Revived line, thinner base spec" },
-      { name:"Dell 27 4K", cfg:"S2725QC monitor", last:349, now:279.99, mem:"held", note:"Panels unaffected — the control" },
+      { name:"Dell XPS 14", cfg:"Ultra5 · 16/512", last:1499, now:1350, mem:"ind", note:"Relaunched line; lower base spec" },
+      { name:"Dell 27 4K", cfg:"S2725QC monitor", last:349, now:279.99, mem:"held", note:"Panels use little memory" },
     ]
   },
   {
-    name:"Google", strat:"Holding the line", stratClass:"held",
-    blurb:"The counterpoint. Every Pixel sits at last year's price — no 2026 hike at all. Though 'flat' sometimes hides a dropped accessory or a storage-gated base, and the tablet line is quietly being sunset.",
+    name:"Google", strat:"Unchanged year over year", stratClass:"held",
+    blurb:"Every Pixel product is at the same price as a year ago — no 2026 increase. Some unchanged prices reflect configuration changes, such as a base model that now starts at higher storage.",
     src:"droid-life; Android Central; Google Store",
     products:[
       { name:"Pixel 10", cfg:"128GB", last:799, now:799, mem:"held" },
       { name:"Pixel 10 Pro", cfg:"128GB", last:999, now:999, mem:"held" },
-      { name:"Pixel 10 Pro XL", cfg:"256GB", last:1199, now:1199, mem:"held", note:"Base storage-gated at 256GB" },
+      { name:"Pixel 10 Pro XL", cfg:"256GB", last:1199, now:1199, mem:"held", note:"Base starts at 256GB" },
       { name:"Pixel Watch 4", cfg:"41mm", last:349, now:349, mem:"held" },
       { name:"Pixel Buds Pro 2", cfg:"ANC", last:229, now:229, mem:"held" },
-      { name:"Pixel Tablet", cfg:"128GB", last:399, now:399, mem:"held", note:"Flat only because dock dropped; line sunset" },
+      { name:"Pixel Tablet", cfg:"128GB", last:399, now:399, mem:"held", note:"Charging dock no longer included; line discontinued" },
       { name:"Google TV 4K", cfg:"32GB", last:99, now:99, mem:"held" },
     ]
   },
@@ -374,7 +374,7 @@ const price=n=> n%1 ? "$"+n.toFixed(2) : "$"+Math.round(n).toLocaleString("en-US
 const mk=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
 
 /* ---------- hero line chart ---------- */
-const VB={w:1000,h:440}, PAD={l:78,r:34,t:34,b:52};
+const VB={w:1000,h:300}, PAD={l:72,r:30,t:26,b:44};
 const PLOT={x:PAD.l,y:PAD.t,w:VB.w-PAD.l-PAD.r,h:VB.h-PAD.t-PAD.b};
 const vals=RAM_SERIES.map(d=>d.value);
 const yMax=Math.ceil(Math.max(...vals)*1.12/50)*50, yMin=0;
