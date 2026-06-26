@@ -24,6 +24,9 @@
   --rise:#FF4326;        /* the "increase" accent (hot) */
   --rise-2:#FF8A3D;      /* gradient partner            */
   --hold:#3B82F6;        /* "holding / flat" accent     */
+  --amber:#E0951A;       /* de-spec / hidden            */
+  --violet:#7C5CFF;      /* split strategy              */
+  --cool:#0FA958;        /* price fell (good for buyer) */
 
   --maxw:1080px;
   --r:14px;              /* card radius */
@@ -54,9 +57,9 @@ header{padding:64px 0 28px}
 h1{
   font-family:var(--font-display);font-weight:600;
   font-size:clamp(30px,5.2vw,54px);line-height:1.04;
-  letter-spacing:-.02em;margin:18px 0 0;max-width:18ch;
+  letter-spacing:-.02em;margin:18px 0 0;max-width:20ch;
 }
-.dek{margin:16px 0 0;font-size:clamp(15px,2vw,18px);color:var(--muted);max-width:54ch}
+.dek{margin:16px 0 0;font-size:clamp(15px,2vw,18px);color:var(--muted);max-width:58ch}
 
 /* ---------- hero instrument ---------- */
 .panel{
@@ -109,65 +112,79 @@ svg.line{display:block;width:100%;height:auto;overflow:visible;touch-action:none
   margin:14px 2px 2px;line-height:1.55;
 }
 
-/* ---------- products ---------- */
-.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-  margin:64px 0 22px;flex-wrap:wrap}
+/* ---------- section intro ---------- */
+.section-head{margin:64px 0 10px}
 .section-head h2{
   font-family:var(--font-display);font-weight:600;font-size:clamp(22px,3.4vw,32px);
   letter-spacing:-.015em;margin:0;
 }
-.section-head .hint{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:16px}
-.swatch{display:inline-flex;align-items:center;gap:7px}
-.swatch i{width:11px;height:11px;border-radius:2px;display:inline-block}
-.swatch .s-last{border:1.5px solid var(--faint);background:transparent}
-.swatch .s-now{background:var(--rise)}
+.section-head p{color:var(--muted);font-size:15px;margin:10px 0 0;max-width:62ch}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:16px}
-.card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:18px 18px 16px;display:flex;flex-direction:column;
-  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .2s;
-}
-.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -22px rgba(20,22,26,.4);border-color:#d6dae1}
-.card .cat{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--faint)}
-.card .name{font-family:var(--font-display);font-weight:600;font-size:16px;
-  margin:4px 0 0;letter-spacing:-.01em;line-height:1.18;min-height:2.3em}
+.legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0 0;
+  padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.legend .grp{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.legend .lk{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.legend .s-last{border:1.5px solid var(--faint);background:transparent}
+.legend .s-now{background:linear-gradient(180deg,var(--rise-2),var(--rise))}
+.legend .dot-c{width:8px;height:8px;border-radius:50%}
+.legend .strat{padding:3px 8px}
 
-.bars{display:flex;align-items:flex-end;gap:18px;height:128px;margin:14px 0 6px;padding-top:6px}
-.bcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
-.bval{font-family:var(--font-mono);font-size:12px;font-weight:600;margin-bottom:6px;color:var(--ink);
-  opacity:0;transition:opacity .5s .35s}
-.bcol.last .bval{color:var(--faint)}
-.bar{width:100%;max-width:54px;border-radius:5px 5px 0 0;height:0;
-  transition:height .9s var(--ease)}
-.bar.last{border:1.5px solid var(--faint);background:repeating-linear-gradient(
+/* ---------- brand section ---------- */
+.brand{margin-top:50px}
+.brand-head{display:flex;align-items:baseline;gap:12px 14px;flex-wrap:wrap;margin-bottom:4px}
+.brand-head h3{font-family:var(--font-display);font-weight:600;
+  font-size:clamp(20px,3vw,28px);letter-spacing:-.015em;margin:0}
+.strat{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.strat.hiked{color:var(--rise);background:rgba(255,67,38,.10)}
+.strat.split{color:var(--violet);background:rgba(124,92,255,.12)}
+.strat.despec{color:var(--amber);background:rgba(224,149,26,.13)}
+.strat.held{color:var(--hold);background:rgba(59,130,246,.10)}
+.brand-blurb{color:var(--muted);font-size:14px;line-height:1.6;margin:4px 0 0;max-width:74ch}
+
+.barchart{display:flex;gap:8px;align-items:stretch;margin:8px 0 0;
+  padding:34px 2px 4px;overflow-x:auto;scrollbar-width:thin}
+.pgroup{flex:1 0 96px;min-width:96px;display:flex;flex-direction:column;align-items:center;
+  border-radius:10px;padding:6px 4px 12px;transition:background .2s}
+.pgroup:hover{background:var(--card)}
+.pdelta{font-family:var(--font-mono);font-weight:700;font-size:13px;margin-bottom:9px;
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pdelta.up{color:var(--rise)} .pdelta.up::before{content:"▲";font-size:9px}
+.pdelta.flat{color:var(--hold)} .pdelta.flat::before{content:"●";font-size:8px}
+.pdelta.down{color:var(--cool)} .pdelta.down::before{content:"▼";font-size:9px}
+
+.pbars{display:flex;align-items:flex-end;justify-content:center;gap:7px;height:188px;width:100%}
+.pcol{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.pprice{font-family:var(--font-mono);font-size:11px;font-weight:600;margin-bottom:6px;
+  white-space:nowrap;opacity:0;transition:opacity .5s .35s}
+.pprice.last{color:var(--faint)}
+.pprice .est{color:var(--faint);font-weight:400}
+.pbar{width:26px;border-radius:5px 5px 0 0;height:0;transition:height .9s var(--ease)}
+.pbar.last{border:1.5px solid var(--faint);background:repeating-linear-gradient(
   -45deg,rgba(154,163,175,.10),rgba(154,163,175,.10) 5px,transparent 5px,transparent 10px)}
-.bar.now{background:linear-gradient(180deg,var(--rise-2),var(--rise))}
-.btag{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--faint);margin-top:7px}
+.pbar.now{background:linear-gradient(180deg,var(--rise-2),var(--rise))}
+.pbar.now.flat{background:linear-gradient(180deg,#7FB0FF,var(--hold))}
+.pbar.now.down{background:linear-gradient(180deg,#4FD08A,var(--cool))}
 
-.delta-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-  margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
-.delta-big{font-family:var(--font-mono);font-weight:700;font-size:22px;letter-spacing:-.01em}
-.delta-big.up{color:var(--rise)} .delta-big.flat{color:var(--hold)} .delta-big.na{color:var(--faint)}
-.status{font-family:var(--font-mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;padding:4px 8px;border-radius:20px}
-.status.up{color:var(--rise);background:rgba(255,67,38,.09)}
-.status.flat{color:var(--hold);background:rgba(59,130,246,.1)}
-.status.na{color:var(--faint);background:rgba(154,163,175,.13)}
-.src{font-family:var(--font-mono);font-size:10px;color:var(--faint);margin-top:10px;line-height:1.5}
-
-/* delayed card variant */
-.card.delayed .bars{align-items:center;justify-content:center}
-.ghostbox{width:100%;height:84px;border:1.5px dashed var(--line);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.psoon{font-family:var(--font-mono);font-size:9px;font-weight:600;color:var(--rise);
+  letter-spacing:.02em;margin-top:8px;text-align:center;min-height:1.2em}
+.pname{font-family:var(--font-display);font-weight:600;font-size:12.5px;line-height:1.2;
+  text-align:center;margin-top:7px}
+.pconfig{font-family:var(--font-mono);font-size:9px;color:var(--faint);letter-spacing:.02em;
+  text-align:center;margin-top:3px;min-height:1.2em}
+.pmem{font-family:var(--font-mono);font-size:8.5px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;margin-top:7px;display:inline-flex;align-items:center;gap:4px}
+.pmem::before{content:"";width:7px;height:7px;border-radius:50%}
+.pmem.cited{color:var(--rise)} .pmem.cited::before{background:var(--rise)}
+.pmem.ind{color:var(--amber)} .pmem.ind::before{background:transparent;border:1.5px solid var(--amber)}
+.pmem.other{color:var(--muted)} .pmem.other::before{background:var(--faint)}
+.pmem.held{color:var(--faint)} .pmem.held::before{background:transparent;border:1.5px solid var(--faint)}
 
 /* ---------- footer ---------- */
-footer{margin:54px 0 80px;padding-top:22px;border-top:1px solid var(--line)}
-footer p{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);line-height:1.7;margin:0;max-width:80ch}
+footer{margin:64px 0 80px;padding-top:22px;border-top:1px solid var(--line)}
+footer p{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);line-height:1.7;margin:0;max-width:92ch}
 footer b{color:var(--ink);font-weight:600}
 
 :focus-visible{outline:2.5px solid var(--rise);outline-offset:3px;border-radius:4px}
@@ -175,11 +192,12 @@ footer b{color:var(--ink);font-weight:600}
 @media (max-width:560px){
   header{padding:44px 0 20px}
   .panel{padding:22px 18px 14px;border-radius:16px}
-  .bars{height:108px}
+  .pbars{height:158px}
+  .pgroup{flex-basis:92px;min-width:92px}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
-  .bval{opacity:1}
+  .pprice{opacity:1}
 }
 </style>
 </head>
@@ -187,9 +205,9 @@ footer b{color:var(--ink);font-weight:600}
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">The RAMageddon Index</div>
-    <h1>The price of memory is setting the price of everything you buy.</h1>
-    <p class="dek">AI's appetite for memory chips is the fastest electronics price shock on record — and it's only starting to reach the shelf. Here's the leading indicator, then the wave.</p>
+    <div class="eyebrow">The RAMageddon Index · July 2026</div>
+    <h1>Memory got expensive. Now every brand is deciding whether to make it your problem.</h1>
+    <p class="dek">AI's hunger for memory chips set off the fastest electronics cost shock on record. Here's the leading indicator — then how five brands are passing it on, hiding it, or eating it.</p>
   </header>
 
   <!-- ===================== HERO INSTRUMENT ===================== -->
@@ -198,7 +216,7 @@ footer b{color:var(--ink);font-weight:600}
       <div class="big" id="bigPrice">$375</div>
       <div class="meta">
         <span class="delta" id="bigDelta">+275% year over year</span>
-        <span class="lab">Cheapest 32GB DDR5 kit · US retail</span>
+        <span class="lab">Cheapest 32GB DDR5 kit · US retail · the cause</span>
       </div>
     </div>
 
@@ -215,15 +233,25 @@ footer b{color:var(--ink);font-weight:600}
     <p class="caption" id="heroCaption"></p>
   </section>
 
-  <!-- ===================== PRODUCTS ===================== -->
+  <!-- ===================== BRANDS ===================== -->
   <div class="section-head">
-    <h2>What it means for your electronics</h2>
-    <div class="hint">
-      <span class="swatch"><i class="s-last"></i> Last year</span>
-      <span class="swatch"><i class="s-now"></i> Now</span>
+    <h2>How five brands are handling the squeeze</h2>
+    <p>Same shock, five playbooks. Each chart compares a product's base price now against a year ago (or launch). The spread — who hikes openly, who hides it, who holds — is the story.</p>
+  </div>
+
+  <div class="legend" id="legend">
+    <div class="grp">
+      <span class="lk"><i class="s-last"></i> Year ago / launch</span>
+      <span class="lk"><i class="s-now"></i> Now</span>
+    </div>
+    <div class="grp">
+      <span class="lk"><span class="dot-c" style="background:var(--rise)"></span> Memory cited</span>
+      <span class="lk"><span class="dot-c" style="border:1.5px solid var(--amber)"></span> Indirect</span>
+      <span class="lk"><span class="dot-c" style="border:1.5px solid var(--faint)"></span> Held flat</span>
     </div>
   </div>
-  <div class="grid" id="grid"></div>
+
+  <div id="brands"></div>
 
   <footer>
     <p id="footnote"></p>
@@ -236,7 +264,7 @@ footer b{color:var(--ink);font-weight:600}
    Each point carries provenance so the page stays auditable.
    ============================================================ */
 
-// Hero: cheapest 32GB DDR5 kit, US retail (USD).
+// Hero: cheapest 32GB DDR5 kit, US retail (USD) — the leading indicator / cause.
 // `sourced:true` = a hard, citable anchor. Others interpolated from reported trend.
 const RAM_SERIES = [
   { label:"Aug ’25", value:95,  note:"Pre-surge baseline" },
@@ -254,21 +282,85 @@ const RAM_SERIES = [
 
 const HERO = {
   baselineForDelta: 100,                       // ~1yr ago, drives the +YoY% readout
-  caption:"Cheapest available 32GB DDR5 kit, US retail. Jan & Jun ’26 are sourced anchors (Tom’s Hardware); intervening months interpolated from the reported trend. Hover any point for detail."
+  caption:"Cheapest available 32GB DDR5 kit, US retail — the upstream cost driving everything below. Jan & Jun ’26 are sourced anchors (Tom’s Hardware); intervening months interpolated from the reported trend. Hover any point for detail."
 };
 
-// Products: last-year vs now. status: "rising" | "flat" | "delayed"
-const PRODUCTS = [
-  { name:"32GB DDR5 RAM kit", cat:"Components", last:100, now:375, status:"rising", src:"Tom’s Hardware — sourced" },
-  { name:"32GB DDR4 RAM kit", cat:"Components", last:75,  now:165, status:"rising", src:"Tom’s Hardware — sourced" },
-  { name:"1TB NVMe SSD",      cat:"Storage",    last:60,  now:110, status:"rising", src:"NAND surge — representative" },
-  { name:"Typical Windows laptop", cat:"Laptops", last:1000, now:1170, status:"rising", src:"Lenovo/Dell/HP/Acer/ASUS ’26 guidance — representative config" },
-  { name:"Samsung Galaxy S26", cat:"Phones",   last:799, now:839, status:"rising", src:"Launch pricing — sourced" },
-  { name:"iPhone (base)",     cat:"Phones",     last:799, now:799, status:"flat",  src:"Apple holding — DRAM contracts expire Jan — sourced" },
-  { name:"Steam Machine",     cat:"Consoles",   last:null,now:null,status:"delayed",src:"Launch delayed by memory costs — sourced" },
+/* ---- Brand lineups. Each product: baseline (~12mo/launch) -> now (US base MSRP, USD).
+   mem: "cited" | "ind" | "other" | "held".  est:true marks an estimated baseline.
+   soon: optional announced upcoming price.  Update / append monthly. ---- */
+const BRANDS = [
+  {
+    name:"Apple", strat:"Hiked — across the board", stratClass:"hiked",
+    blurb:"On June 25 Apple raised prices across nearly its entire Mac and iPad lineup in a single day, naming memory and storage costs outright. iPhone, Watch and AirPods were spared — a tell for which products carry the most memory.",
+    src:"9to5Mac, Jun 25 2026; CNBC",
+    products:[
+      { name:"iPad 11″", cfg:"A16 · 128GB", last:349, now:449, mem:"cited", note:"Jun 25 hike +$100" },
+      { name:"MacBook Neo", cfg:"A18 Pro · 256GB", last:599, now:699, mem:"cited", note:"New budget Mac — cheapest ever" },
+      { name:"iPad Air 11″", cfg:"M4 · 128GB", last:599, now:749, mem:"cited" },
+      { name:"iPad Pro 11″", cfg:"M5 · 256GB", last:999, now:1199, mem:"cited" },
+      { name:"MacBook Air 13″", cfg:"M5 · 16/512", last:999, now:1299, mem:"cited", note:"M4 launch $999 → +$100 Mar → +$200 Jun" },
+      { name:"iMac 24″", cfg:"M4 · 16/256", last:1299, now:1499, mem:"cited" },
+      { name:"MacBook Pro 14″", cfg:"M5 · 16/512", last:1699, now:1999, mem:"cited" },
+      { name:"iPhone 17", cfg:"256GB · control", last:799, now:799, mem:"held", note:"Left untouched — Apple's control" },
+    ]
+  },
+  {
+    name:"Samsung", strat:"Hiking — while profiting", stratClass:"hiked",
+    blurb:"The irony of the surge: Samsung is the world's #1 memory maker. The same shortage that lifted its quarterly profit ~8× (≈$38B) is now raising the bill of materials on its own phones and tablets — and it's passing that on to you.",
+    src:"Korea Times; TrendForce; samsung.com",
+    products:[
+      { name:"Galaxy S26", cfg:"12/256", last:799.99, now:899.99, mem:"cited", note:"128GB tier dropped" },
+      { name:"Galaxy Z Fold 7", cfg:"12/256", last:1999.99, now:1999.99, mem:"held", note:"Fold 8 (Jul 22) rumored hike" },
+      { name:"Galaxy Z Flip 7", cfg:"12/256", last:1099.99, now:1099.99, mem:"held" },
+      { name:"Galaxy Tab A11+", cfg:"8/256", last:219.99, now:249.99, mem:"ind", note:"RAM 2×, storage 4×", est:true },
+      { name:"Galaxy Book6", cfg:"Ultra · 16/512", last:999.99, now:1049.99, mem:"ind" },
+      { name:"Galaxy Watch 8", cfg:"40mm", last:299.99, now:349.99, mem:"other", note:"Redesign, not memory" },
+      { name:"Galaxy Buds 4", cfg:"ANC", last:179.99, now:179.99, mem:"held" },
+    ]
+  },
+  {
+    name:"Microsoft", strat:"Hiked + de-spec’d", stratClass:"split",
+    blurb:"Two playbooks at once. Xbox takes open sticker hikes (with another round landing Aug 1). Surface keeps prices near flat but halves the RAM to 8GB — which quietly strips Copilot+ certification. Pay more, or pay the same for less.",
+    src:"Xbox Wire, Jun 25 2026; Gematsu; XDA",
+    products:[
+      { name:"Xbox Series X", cfg:"1TB · disc", last:599.99, now:649.99, mem:"cited", soon:"→ $800 Aug 1" },
+      { name:"Xbox Series S", cfg:"512GB", last:379.99, now:399.99, mem:"cited", soon:"→ $500 Aug 1" },
+      { name:"Xbox X Digital", cfg:"1TB", last:549.99, now:599.99, mem:"cited", soon:"→ $750 Aug 1", est:true },
+      { name:"ROG Xbox Ally", cfg:"Z2A · 16/512", last:599.99, now:599.99, mem:"held", note:"ASUS-set; US base held" },
+      { name:"Surface Pro 12″", cfg:"now 8GB/256", last:799, now:849, mem:"cited", note:"Half the RAM — loses Copilot+" },
+      { name:"Surface Laptop 13″", cfg:"now 8GB/256", last:899, now:949, mem:"cited", note:"8GB de-spec" },
+    ]
+  },
+  {
+    name:"Dell", strat:"Hiding it", stratClass:"despec",
+    blurb:"The hardest to spot. Advertised 'starting' prices hold via rotating promos while list prices and big-ticket desktops climb 25–50% — and the flagship gaming laptop gets pricier with half the SSD. Monitors, untouched by memory, are the giveaway control.",
+    src:"dell.com (Jun 26 2026); Gartner; launch coverage",
+    products:[
+      { name:"Dell Tower", cfg:"Ultra5 · 16/1TB", last:599, now:919.99, mem:"cited", note:"vs Inspiron 3030 ’25 — cross-model", est:true },
+      { name:"Dell 27 AIO", cfg:"Core5 · 16/512", last:749.99, now:949.99, mem:"cited", est:true },
+      { name:"Alienware 16", cfg:"16GB · RTX4050", last:1149, now:1649.99, mem:"cited", note:"SSD CUT 1TB → 512GB" },
+      { name:"Dell 15 (list)", cfg:"Core3 · 8/512", last:649, now:799.99, mem:"ind", note:"List price; street still ~$450", est:true },
+      { name:"Dell XPS 14", cfg:"Ultra5 · 16/512", last:1499, now:1350, mem:"ind", note:"Revived line, thinner base spec" },
+      { name:"Dell 27 4K", cfg:"S2725QC monitor", last:349, now:279.99, mem:"held", note:"Panels unaffected — the control" },
+    ]
+  },
+  {
+    name:"Google", strat:"Holding the line", stratClass:"held",
+    blurb:"The counterpoint. Every Pixel sits at last year's price — no 2026 hike at all. Though 'flat' sometimes hides a dropped accessory or a storage-gated base, and the tablet line is quietly being sunset.",
+    src:"droid-life; Android Central; Google Store",
+    products:[
+      { name:"Pixel 10", cfg:"128GB", last:799, now:799, mem:"held" },
+      { name:"Pixel 10 Pro", cfg:"128GB", last:999, now:999, mem:"held" },
+      { name:"Pixel 10 Pro XL", cfg:"256GB", last:1199, now:1199, mem:"held", note:"Base storage-gated at 256GB" },
+      { name:"Pixel Watch 4", cfg:"41mm", last:349, now:349, mem:"held" },
+      { name:"Pixel Buds Pro 2", cfg:"ANC", last:229, now:229, mem:"held" },
+      { name:"Pixel Tablet", cfg:"128GB", last:399, now:399, mem:"held", note:"Flat only because dock dropped; line sunset" },
+      { name:"Google TV 4K", cfg:"32GB", last:99, now:99, mem:"held" },
+    ]
+  },
 ];
 
-const FOOTNOTE = "<b>Methodology.</b> Component prices reflect cheapest US retail kits (Tom’s Hardware daily trackers). Finished-goods figures use manufacturer launch pricing where available; entries marked “representative” reflect publicly stated OEM guidance applied to a typical configuration, pending exact SKU confirmation. Last updated Jun 2026.";
+const FOOTNOTE = "<b>Methodology.</b> Each chart compares a product's current US base-config price (MSRP unless noted) against its price ~12 months ago or at launch. Figures are drawn from manufacturer pages, major retailers and established tech press as of Jun 26 2026; baselines marked “≈” are estimates where SKUs were rebranded or refreshed (notably Dell). Apple's June 25 increases are sourced to <b>9to5Mac</b>; Microsoft's Aug 1 Xbox increases to <b>Xbox Wire</b>. “Memory cited” means the maker explicitly named DRAM/NAND costs; “indirect” means component cost is implicated but not stated. The hero DRAM series uses sourced Jan & Jun ’26 anchors (Tom's Hardware) with interpolated intervening months. Updated monthly — this is the July 2026 issue.";
 
 /* ============================================================
    RENDER — you shouldn't need to touch anything below.
@@ -277,6 +369,8 @@ const $=(s,el=document)=>el.querySelector(s);
 const NS="http://www.w3.org/2000/svg";
 const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
 const money=n=>"$"+Math.round(n).toLocaleString("en-US");
+// exact price: show cents only when present (e.g. $649.99 stays precise, $799 stays clean)
+const price=n=> n%1 ? "$"+n.toFixed(2) : "$"+Math.round(n).toLocaleString("en-US");
 const mk=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
 
 /* ---------- hero line chart ---------- */
@@ -382,60 +476,64 @@ const Y=v=>PLOT.y+PLOT.h-((v-yMin)/(yMax-yMin))*PLOT.h;
   });
 })();
 
-/* ---------- product cards ---------- */
-(function products(){
-  const grid=$("#grid");
-  PRODUCTS.forEach(p=>{
-    const card=document.createElement("div");
-    card.className="card"+(p.status==="delayed"?" delayed":"");
-    card.tabIndex=0;
+/* ---------- brand bar charts ---------- */
+(function brands(){
+  const root=$("#brands");
+  const MEMLAB={cited:"memory",ind:"memory*",other:"other",held:"held"};
 
-    let pct=0,cls="up",statusTxt="Rising";
-    if(p.status==="flat"){cls="flat";statusTxt="Holding";}
-    if(p.status==="delayed"){cls="na";statusTxt="Delayed";}
-    if(p.last&&p.now)pct=Math.round((p.now-p.last)/p.last*100);
+  BRANDS.forEach(b=>{
+    const sec=document.createElement("section");
+    sec.className="brand";
+    sec.setAttribute("aria-label",b.name+" pricing");
 
-    let barsHTML;
-    if(p.status==="delayed"){
-      barsHTML=`<div class="bars"><div class="ghostbox">No price — pulled</div></div>`;
-    }else{
-      const nowH=100, lastH=Math.max(4,Math.round(p.last/p.now*100));
-      barsHTML=`<div class="bars">
-        <div class="bcol last"><span class="bval">${money(p.last)}</span>
-          <div class="bar last" data-h="${lastH}"></div><span class="btag">Last yr</span></div>
-        <div class="bcol now"><span class="bval">${money(p.now)}</span>
-          <div class="bar now" data-h="${nowH}"></div><span class="btag">Now</span></div>
+    // scale bars to the brand's own max value
+    const maxV=Math.max(...b.products.flatMap(p=>[p.last,p.now]));
+    const H=v=>Math.max(5,Math.round(v/maxV*82));   // % of plot height, leave room for label
+
+    const cols=b.products.map(p=>{
+      const pct=p.last? Math.round((p.now-p.last)/p.last*100):0;
+      const dir=pct>0?"up":(pct<0?"down":"flat");
+      const dTxt=pct>0?`+${pct}%`:(pct<0?`${pct}%`:"0%");
+      const nowCls=dir==="flat"?"flat":(dir==="down"?"down":"");
+      const lastTxt=(p.est?'<span class="est">≈</span>':"")+price(p.last);
+      const title=[p.name+" — "+p.cfg, p.note||"", "Source: "+b.src].filter(Boolean).join(" · ");
+      return `<div class="pgroup" tabindex="0" title="${title.replace(/"/g,'&quot;')}">
+        <div class="pdelta ${dir}">${dTxt}</div>
+        <div class="pbars">
+          <div class="pcol"><span class="pprice last">${lastTxt}</span>
+            <div class="pbar last" data-h="${H(p.last)}"></div></div>
+          <div class="pcol"><span class="pprice now">${price(p.now)}</span>
+            <div class="pbar now ${nowCls}" data-h="${H(p.now)}"></div></div>
+        </div>
+        <div class="psoon">${p.soon||""}</div>
+        <div class="pname">${p.name}</div>
+        <div class="pconfig">${p.cfg}</div>
+        <div class="pmem ${p.mem}">${MEMLAB[p.mem]}</div>
       </div>`;
-    }
-    const deltaTxt=p.status==="delayed"?"N/A":(p.status==="flat"?"+0%":`+${pct}%`);
+    }).join("");
 
-    card.innerHTML=`
-      <div class="cat">${p.cat}</div>
-      <div class="name">${p.name}</div>
-      ${barsHTML}
-      <div class="delta-row">
-        <span class="delta-big ${cls}">${deltaTxt}</span>
-        <span class="status ${cls}">${statusTxt}</span>
+    sec.innerHTML=`
+      <div class="brand-head">
+        <h3>${b.name}</h3>
+        <span class="strat ${b.stratClass}">${b.strat}</span>
       </div>
-      <div class="src">${p.src}</div>`;
-    grid.append(card);
+      <p class="brand-blurb">${b.blurb}</p>
+      <div class="barchart">${cols}</div>`;
+    root.append(sec);
   });
 
   // reveal + grow on scroll
-  const bars=()=>document.querySelectorAll(".bar");
-  if(reduce){bars().forEach(b=>{b.style.height=b.dataset.h+"%";});
-    document.querySelectorAll(".bval").forEach(v=>v.style.opacity=1);return;}
-  const io=new IntersectionObserver((ents)=>{
-    ents.forEach(e=>{
-      if(!e.isIntersecting)return;
-      e.target.querySelectorAll(".bar").forEach((b,i)=>{
-        setTimeout(()=>{b.style.height=b.dataset.h+"%";},i*90);
-      });
-      e.target.querySelectorAll(".bval").forEach(v=>v.style.opacity=1);
-      io.unobserve(e.target);
+  const grow=el=>{
+    el.querySelectorAll(".pbar").forEach((bar,i)=>{
+      setTimeout(()=>{bar.style.height=bar.dataset.h+"%";}, i*55);
     });
-  },{threshold:.35});
-  document.querySelectorAll(".card").forEach(c=>io.observe(c));
+    el.querySelectorAll(".pprice").forEach(v=>v.style.opacity=1);
+  };
+  if(reduce){document.querySelectorAll(".barchart").forEach(grow);return;}
+  const io=new IntersectionObserver(ents=>{
+    ents.forEach(e=>{ if(e.isIntersecting){ grow(e.target); io.unobserve(e.target);} });
+  },{threshold:.18});
+  document.querySelectorAll(".barchart").forEach(c=>io.observe(c));
 })();
 
 $("#footnote").innerHTML=FOOTNOTE;
